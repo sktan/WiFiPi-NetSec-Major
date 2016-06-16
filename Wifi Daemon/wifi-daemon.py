@@ -1,6 +1,6 @@
 #!/usr/bin/env python
  
-import sys, time, socket, subprocess
+import sys, time, socket, subprocess, base64
 from daemon import Daemon
  
 class MyDaemon(Daemon):
@@ -17,10 +17,37 @@ class MyDaemon(Daemon):
 		        while True:
 		                data = conn.recv(BUFFER_SIZE)
 		                if not data: break
-		                print data
-		                conn.send(data)
-		                p = subprocess.Popen(["iptables", "-A", "FORWARD", "-s", data, "-i", "wlan0", "-j", "ACCEPT"], stdout=subprocess.PIPE)
-		                output , err = p.communicate()
+                                if data == "list":
+		                        p = subprocess.Popen(["iwlist", "wlan", "scan"], stdout=subprocess.PIPE)
+		                        output , err = p.communicate()
+
+                                        wifi_networks = output.findall('ESSID:"(.*?)+"', string)
+                                        conn.send(output)
+		                else if data.startswith("firewall"):
+		                        conn.send(data)
+
+                                        data = data[9:]
+		                        p = subprocess.Popen(["iptables", "-A", "FORWARD", "-s", data, "-i", "wlan0", "-j", "ACCEPT"], stdout=subprocess.PIPE)
+		                        output , err = p.communicate()
+                                else if data.startswith("wifi"):
+                                        wifi_params = data.split()
+                                        wifi_network = wifi_params[0].decode('base64')
+                                        wifi_password = wifi_params[0].decode('base64')
+
+                                        p = subprocess.Popen(["wpa_passphrase", wifi_network, wifi_password], stdout=subprocess.PIPE)
+                                        output , err = p.communicate()
+
+                                        orig_config = "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev\n"
+                                        orig_config += "update_config=1\n"
+                                        orig_config += "country=GB\n\n"
+
+                                        wpa_config = orig_config + output
+
+                                        f = open("/etc/wpa_supplicant/wpa_supplicant.conf", "w");
+                                        f.write(wpa_config);
+                                        f.close();
+
+                                        conn.send(output)
 			conn.close()
  
 if __name__ == "__main__":

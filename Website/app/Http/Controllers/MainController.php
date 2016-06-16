@@ -31,13 +31,13 @@ class MainController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function success() {
-	$fp = fsockopen("127.0.0.1", 27015, $errno, $errstr, 30);
-	if (!$fp) {
-	    die("$errstr ($errno)<br />\n");
-	} else {
-	    fputs($fp, $_SERVER['REMOTE_ADDR']);
-	    fclose($fp);
-	}
+        $fp = fsockopen("127.0.0.1", 27015, $errno, $errstr, 30);
+        if (!$fp) {
+            die("$errstr ($errno)<br />\n");
+        } else {
+            fputs($fp, "firewall " . $_SERVER['REMOTE_ADDR']);
+            fclose($fp);
+        }
 
         return view('auth.completed');
     }
