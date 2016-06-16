@@ -28,8 +28,8 @@ Route::group(['middleware' => 'auth'], function () {
 
     // Routes for Administrator pages
     Route::group(['middleware' => 'admin'], function () {
-        Route::get('/admin', function () {
-            return "hello admin";
-        });
+        Route::get('/admin', 'AdminController@getListNetworks');
+        Route::get('/admin/{network}', 'AdminController@getConnectNetwork');
+        Route::post('/admin/{network}', 'AdminController@postConnectNetwork');
     });
 });

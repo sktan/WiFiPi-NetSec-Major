@@ -22,6 +22,10 @@
         .fa-btn {
             margin-right: 6px;
         }
+
+        .wifi-login-form {
+            padding: 20px;
+        }
     </style>
 </head>
 <body id="app-layout">
