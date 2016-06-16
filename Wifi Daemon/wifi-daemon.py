@@ -31,8 +31,8 @@ class MyDaemon(Daemon):
 		                        output , err = p.communicate()
                                 elif data.startswith("wifi"):
                                         wifi_params = data.split()
-                                        wifi_network = wifi_params[0].decode('base64')
-                                        wifi_password = wifi_params[0].decode('base64')
+                                        wifi_network = wifi_params[1].decode('base64')
+                                        wifi_password = wifi_params[2].decode('base64')
 
                                         p = subprocess.Popen(["wpa_passphrase", wifi_network, wifi_password], stdout=subprocess.PIPE)
                                         output , err = p.communicate()
@@ -47,7 +47,12 @@ class MyDaemon(Daemon):
                                         f.write(wpa_config);
                                         f.close();
 
-                                        conn.send(output)
+                                        p = subprocess.Popen(["ifdown", "wlan1"], stdout=subprocess.PIPE)
+                                        output , err = p.communicate()
+                                        p = subprocess.Popen(["ifup", "wlan1"], stdout=subprocess.PIPE)
+                                        output , err = p.communicate()
+
+                                        conn.send("done")
 			conn.close()
  
 if __name__ == "__main__":
