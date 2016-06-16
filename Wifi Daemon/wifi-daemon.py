@@ -1,6 +1,6 @@
 #!/usr/bin/env python
  
-import sys, time, socket, subprocess, base64
+import sys, time, socket, subprocess, base64, re
 from daemon import Daemon
  
 class MyDaemon(Daemon):
@@ -19,9 +19,10 @@ class MyDaemon(Daemon):
 		                if not data: break
                                 if data == "list":
 		                        p = subprocess.Popen(["iwlist", "wlan1", "scan"], stdout=subprocess.PIPE)
-		                        output , err = p.communicate()
+                                        output , err = p.communicate()
 
                                         wifi_networks = re.findall('ESSID:"([^"]*)"', output)
+
                                         conn.send("|".join(wifi_networks))
 		                elif data.startswith("firewall"):
 		                        conn.send(data)
