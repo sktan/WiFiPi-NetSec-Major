@@ -23,13 +23,13 @@ class MyDaemon(Daemon):
 
                                         wifi_networks = re.findall('ESSID:"([^"]*)"', output)
                                         conn.send("|".join(wifi_networks))
-		                else if data.startswith("firewall"):
+		                elif data.startswith("firewall"):
 		                        conn.send(data)
 
                                         data = data[9:]
 		                        p = subprocess.Popen(["iptables", "-A", "FORWARD", "-s", data, "-i", "wlan0", "-j", "ACCEPT"], stdout=subprocess.PIPE)
 		                        output , err = p.communicate()
-                                else if data.startswith("wifi"):
+                                elif data.startswith("wifi"):
                                         wifi_params = data.split()
                                         wifi_network = wifi_params[0].decode('base64')
                                         wifi_password = wifi_params[0].decode('base64')
