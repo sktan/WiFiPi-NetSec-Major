@@ -55,7 +55,7 @@ class AdminController extends Controller
         if (!$fp) {
             die("$errstr ($errno)<br />\n");
         } else {
-            fputs($fp, "wifi " . base64_encode($network) . " " . base64_encode($request->password));
+            fputs($fp, "wifi " . $network . " " . base64_encode($request->password));
             
             fclose($fp);
         }
