@@ -18,7 +18,7 @@ class MyDaemon(Daemon):
 		                data = conn.recv(BUFFER_SIZE)
 		                if not data: break
                                 if data == "list":
-		                        p = subprocess.Popen(["iwlist", "wlan", "scan"], stdout=subprocess.PIPE)
+		                        p = subprocess.Popen(["iwlist", "wlan1", "scan"], stdout=subprocess.PIPE)
 		                        output , err = p.communicate()
 
                                         wifi_networks = output.findall('ESSID:"(.*?)+"', string)
