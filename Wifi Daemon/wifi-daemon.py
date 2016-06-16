@@ -21,8 +21,8 @@ class MyDaemon(Daemon):
 		                        p = subprocess.Popen(["iwlist", "wlan1", "scan"], stdout=subprocess.PIPE)
 		                        output , err = p.communicate()
 
-                                        wifi_networks = output.findall('ESSID:"(.*?)+"', string)
-                                        conn.send(output)
+                                        wifi_networks = re.findall('ESSID:"([^"]*)"', output)
+                                        conn.send("|".join(wifi_networks))
 		                else if data.startswith("firewall"):
 		                        conn.send(data)
 
