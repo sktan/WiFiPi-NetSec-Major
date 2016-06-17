@@ -29,7 +29,7 @@ class AdminController extends Controller
     }
 
     public function getListNetworks(Request $request) {
-        $fp = fsockopen("10.10.10.20", 27015, $errno, $errstr, 30);
+        $fp = fsockopen("127.0.0.1", 27015, $errno, $errstr, 30);
         if (!stream_set_timeout($fp, 30)) die("Could not set timeout");
 
         if (!$fp) {
@@ -49,7 +49,7 @@ class AdminController extends Controller
     }
     
     public function postConnectNetwork(Request $request, $network) {
-        $fp = fsockopen("10.10.10.20", 27015, $errno, $errstr, 30);
+        $fp = fsockopen("127.0.0.1", 27015, $errno, $errstr, 30);
         if (!stream_set_timeout($fp, 30)) die("Could not set timeout");
 
         if (!$fp) {
