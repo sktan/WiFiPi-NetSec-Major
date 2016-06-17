@@ -5,7 +5,7 @@ from daemon import Daemon
  
 class MyDaemon(Daemon):
         def run(self):
-		TCP_IP = '0.0.0.0'
+		TCP_IP = '127.0.0.1'
 		TCP_PORT = 27015
 		BUFFER_SIZE = 128
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
